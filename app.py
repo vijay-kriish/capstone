@@ -1,3 +1,4 @@
+%%writefile app.py
 import streamlit as st
 import torch
 import torch.nn as nn
@@ -35,7 +36,8 @@ class Up(nn.Module):
         x1 = self.up(x1)
         diffY = x2.size(2) - x1.size(2)
         diffX = x2.size(3) - x1.size(3)
-        x1 = F.pad(x1, [diffX//2, diffX-diffX//2, dy//2, dy-dy//2]) # Use dy instead of diffY
+        # Corrected padding
+        x1 = F.pad(x1, [diffX//2, diffX-diffX//2, diffY//2, diffY-diffY//2])
         return self.conv(torch.cat([x2, x1], dim=1))
 
 class BayesianUNet(nn.Module):
